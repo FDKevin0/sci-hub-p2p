@@ -161,7 +161,7 @@ var getCmd = &cobra.Command{
 var glob string
 
 func init() {
-	Cmd.AddCommand(loadCmd, getCmd, verifyCmd)
+	Cmd.AddCommand(loadCmd, getCmd, verifyCmd, fetchCmd)
 
 	loadCmd.Flags().StringVar(&glob, "glob", "",
 		"glob pattern to search torrents to avoid 'Argument list too long' error")

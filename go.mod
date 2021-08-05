@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/IncSW/go-bencode v0.1.2
+	github.com/PuerkitoBio/goquery v1.7.1 // indirect
 	github.com/anacrolix/log v0.9.0
 	github.com/anacrolix/torrent v1.29.1
 	github.com/cheggaaa/pb/v3 v3.0.8
@@ -41,6 +42,7 @@ require (
 	github.com/multiformats/go-multiaddr v0.3.3
 	github.com/multiformats/go-multihash v0.0.15
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/parnurzeal/gorequest v0.2.16 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/polydawn/refmt v0.0.0-20201211092308-30ac6d18308e // indirect
 	github.com/schollz/progressbar/v3 v3.8.2
@@ -54,4 +56,5 @@ require (
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
+	moul.io/http2curl v1.0.0 // indirect
 )
