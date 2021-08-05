@@ -11,10 +11,12 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sci_hub_p2p/internal/torrent"
 	"sci_hub_p2p/internal/utils"
 	"sci_hub_p2p/pkg/logger"
 	"strings"
 	"sync"
+	"time"
 )
 
 var fetchCmd = &cobra.Command{
@@ -65,9 +67,11 @@ func fetchTorrent(ch chan bool, bar *pb.ProgressBar, fileName string) {
 	defer wg.Done()
 	fileLink := LibGenUrl + fileName
 	ch <- true
-	resp, err := http.Get(fileLink)
-	if err != nil {
-		panic(err)
+	resp, _, errs := gorequest.New().Get(fileLink).
+		Retry(3, 100*time.Millisecond, http.StatusBadRequest, http.StatusInternalServerError).
+		End()
+	if errs != nil {
+		logger.Info(fmt.Sprintf("fetch torrent %s error", fileName))
 	}
 	defer resp.Body.Close()
 
@@ -81,7 +85,18 @@ func fetchTorrent(ch chan bool, bar *pb.ProgressBar, fileName string) {
 	if err != nil {
 		logger.Fatal(err.Error())
 	}
-	bar.Increment()
+	raw, err := os.ReadFile(filepath.Join(torrentPath, fileName))
+	if err == nil {
+		_, err = torrent.ParseRaw(raw)
+		if err == nil {
+			bar.Increment()
+			<-ch
+			return
+		}
+	}
+	logger.Info(fmt.Sprintf("fetch torrent %s error", fileName))
+	wg.Add(1)
+	go fetchTorrent(ch, bar, fileName)
 	<-ch
 }
 
