@@ -70,31 +70,30 @@ func fetchTorrent(ch chan bool, bar *pb.ProgressBar, fileName string) {
 	resp, _, errs := gorequest.New().Get(fileLink).
 		Retry(3, 100*time.Millisecond, http.StatusBadRequest, http.StatusInternalServerError).
 		End()
-	if errs != nil {
-		logger.Info(fmt.Sprintf("fetch torrent %s error", fileName))
-	}
-	defer resp.Body.Close()
+	if errs == nil {
+		defer resp.Body.Close()
 
-	out, err := os.Create(filepath.Join(torrentPath, fileName))
-	if err != nil {
-		logger.Fatal(err.Error())
-	}
-	defer out.Close()
+		out, err := os.Create(filepath.Join(torrentPath, fileName))
+		if err != nil {
+			logger.Fatal(err.Error())
+		}
+		defer out.Close()
 
-	_, err = io.Copy(out, resp.Body)
-	if err != nil {
-		logger.Fatal(err.Error())
-	}
-	raw, err := os.ReadFile(filepath.Join(torrentPath, fileName))
-	if err == nil {
-		_, err = torrent.ParseRaw(raw)
+		_, err = io.Copy(out, resp.Body)
+		if err != nil {
+			logger.Fatal(err.Error())
+		}
+		raw, err := os.ReadFile(filepath.Join(torrentPath, fileName))
 		if err == nil {
-			bar.Increment()
-			<-ch
-			return
+			_, err = torrent.ParseRaw(raw)
+			if err == nil {
+				bar.Increment()
+				<-ch
+				return
+			}
 		}
 	}
-	logger.Info(fmt.Sprintf("fetch torrent %s error", fileName))
+	logger.Info(fmt.Sprintf("fetch torrent %s error, will retry at last", fileName))
 	wg.Add(1)
 	go fetchTorrent(ch, bar, fileName)
 	<-ch
