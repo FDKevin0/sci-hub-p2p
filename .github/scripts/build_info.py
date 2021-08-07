@@ -1,5 +1,10 @@
-import re
+"""set env var
+`REF`: `v0.0.1` or `pr-13`
+`SHA`: commit sha, length 7
+`TIME`: build time iso format
+"""
 import os
+import re
 from datetime import datetime
 
 ref = os.getenv("GITHUB_REF", "develop")
