@@ -57,3 +57,7 @@ func TorrentDBPath() string {
 func IpfsDBPath() string {
 	return filepath.Join(GetAppBaseDir(), consts.IPFSBlockDB)
 }
+
+func TelegramFilesDBPath() string {
+	return filepath.Join(GetAppBaseDir(), "torrent.bolt")
+}

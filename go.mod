@@ -56,5 +56,6 @@ require (
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	google.golang.org/protobuf v1.27.1
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
+	gopkg.in/tucnak/telebot.v2 v2.3.5 // indirect
 	moul.io/http2curl v1.0.0 // indirect
 )

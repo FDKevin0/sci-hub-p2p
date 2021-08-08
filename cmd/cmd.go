@@ -18,6 +18,7 @@ import (
 	"os"
 	"runtime"
 	"runtime/pprof"
+	"sci_hub_p2p/cmd/bot"
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
@@ -91,7 +92,7 @@ var debugCmd = &cobra.Command{
 }
 
 func Execute() {
-	rootCmd.AddCommand(daemon.Cmd, indexes.Cmd, torrent.Cmd, paper.Cmd, debugCmd, ipfs.Cmd)
+	rootCmd.AddCommand(daemon.Cmd, indexes.Cmd, torrent.Cmd, paper.Cmd, debugCmd, ipfs.Cmd, bot.Cmd)
 
 	rootCmd.PersistentFlags().StringVar(&flag.LogFile, "log-file", "", "extra logger file, eg: ./out/log.jsonlines")
 	rootCmd.PersistentFlags().BoolVar(&flag.Debug, "debug", false, "enable Debug")
